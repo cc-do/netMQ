@@ -1,0 +1,21 @@
+{
+  //心跳包标志
+  "heart_flag": "HEART",
+  "config": [
+    {
+      "identify": "1c",
+      "path": [ "D:\\share" ],
+      "code_path": "scriptCs\\DataCount.cs",
+      "name": "DataCount",
+      "interval": 60,
+      "address": ""
+    },
+    {
+      "identify": "2c",
+      "path": [ "D:\\share" ],
+      "name": "",
+      "interval": 60,
+      "address": ""
+    }
+  ]
+}
