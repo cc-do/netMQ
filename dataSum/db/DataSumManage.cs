@@ -9,9 +9,14 @@ namespace dataSum.db
 {
     public class DataSumManage : DbInterface<SumModel>
     {
-        public override List<SumModel> GetListByFilter(string filter)
+        public override List<SumModel> GetListByFilter(string date, string key)
         {
-            return base.sumModel.GetList(it => it.add_date == filter);
+            return base.sumModel.GetList(it => it.add_date == date && it.key == key);
+        }
+
+        public override bool Exits(string date)
+        {
+            return base.sumModel.IsAny(it => it.add_date == date);
         }
     }
 }

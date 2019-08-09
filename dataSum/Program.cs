@@ -1,9 +1,11 @@
 ﻿using dataSum.db;
 using dataSum.model;
+using dataSum.tool;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace dataSum
 {
@@ -11,33 +13,63 @@ namespace dataSum
     {
         static void Main(string[] args)
         {
-            List<string> path_list = new List<string>();
-            path_list.Add(@"D:\share");
-            path_list.Add(@"D:\data");
+            ConfigModel configModel = CommonTools.GetJsonConfig();
+            var sm = new DataSumManage();
+            while (true)
+            {
+                if (CommonTools.WorkingDate())
+                {
+                    DataStatistics(configModel, sm);
+                    Thread.Sleep(600000);
+                }
+                else
+                {
+                    Console.Clear();
+                }
+            }
 
-            string[] path = path_list.ToArray();
+        }
+
+        static void DataStatistics(ConfigModel configModel, DataSumManage sm)
+        {
+            string[] path = configModel.Path;
+            string config_key = configModel.key;
 
             DataSum dataSum = new DataSum();
             dataSum.StatFunc(path);
 
-            var sum = new SumModel() {
-                key = "cc",
-                sum = dataSum.totalBytes.ToString(),
-                add_date = dataSum.addDate,
-                update_date = dataSum.updateDate
-            };
+            string total = CommonTools.GetSizeStr(dataSum.totalBytes);
+            string addDate = dataSum.addDate;
+            string updateDate = dataSum.updateDate;
 
-            var sm = new DataSumManage();
-            sm.Insert(sum);
+            var dataList = sm.GetListByFilter(addDate, config_key);
+            int count = dataList.Count;
 
-            Console.WriteLine(dataSum.dataPath.Count);
-            Console.WriteLine(dataSum.addDate);
-            Console.WriteLine(dataSum.updateDate);
-            Console.WriteLine(dataSum.totalBytes);
+            var sum = new SumModel()
+            {
+                key = config_key,
+                sum = total,
+                add_date = addDate,
+                update_date = updateDate,
+                path = string.Join(",", path)
+        };
+            
+            if (count != 0)
+            {
+                sum.id = dataList[0].id;
+                sm.Update(sum);
+            }
+            else
+            {
+                sm.Insert(sum);
+            }
+            
+            Console.WriteLine(addDate);
+            Console.WriteLine(updateDate);
+            Console.WriteLine(total);
+            Console.WriteLine("数据更新成功");
             Console.WriteLine("*****************************");
-
-
-            Console.ReadLine();
+            
         }
     }
 }

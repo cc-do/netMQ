@@ -9,8 +9,8 @@ namespace testApp
     [Serializable]
     public class ConfigParam
     {
-        [JsonProperty(PropertyName = "identify")]
-        public string Identify { get; private set; }
+        [JsonProperty(PropertyName = "key")]
+        public string key { get; private set; }
 
         [JsonProperty(PropertyName = "path")]
         public string[] Path { get; private set; }

@@ -39,7 +39,7 @@ namespace dataSum.inter
         /// 按条件查询
         /// </summary>
         /// <returns></returns>
-        public virtual List<T> GetListByFilter(string filter)
+        public virtual List<T> GetListByFilter(string date, string key)
         {
             return CurrentDb.GetList();
         }
@@ -73,6 +73,14 @@ namespace dataSum.inter
         public virtual bool Update(T obj)
         {
             return CurrentDb.Update(obj);
+        }
+        /// <summary>
+        /// 判断记录是否存在
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool Exits(string date)
+        {
+            return true;
         }
     }
 }
